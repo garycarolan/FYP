@@ -66,12 +66,19 @@ class CCCP(Agent):
 class Arithmetic(Agent):
   def __init__(self, const = 0):
     self.const = const % 1
+
+  # TODO: attempted to improve performance, verify it works the same
   def __call__(self, board_fen):
     board = chess.Board(board_fen)
     legal_moves = list(board.legal_moves)
-    idx = int(self.const * len(legal_moves))
-    move = sorted(legal_moves, key=lambda x: str(x).lower())[idx]
-    return move.uci()
+    # Pre-compute the string representations of the moves
+    moves_str = [(move, str(move)) for move in legal_moves]
+    # Sort the moves based on their pre-computed string representations
+    moves_str_sorted = sorted(moves_str, key=lambda x: x[1].lower())
+    # Select the move based on the const value
+    idx = int(self.const * len(moves_str_sorted))
+    selected_move = moves_str_sorted[idx][0]  # Get the move from the (move, string) pair
+    return selected_move.uci()
 
 class Alphabetical(Arithmetic):
   def __init__(self):
@@ -118,7 +125,7 @@ class NegativeStockfish(Agent):
   def __init__(self, engine, time_limit = 0.1):
     self.engine = engine
     # this analyzes moves individually so same limit as normal Stockfish is excessive w/ very large execution time
-    self.time_limit = (time_limit/10000)
+    self.time_limit = (time_limit/1000000)
 
   def __call__(self, board_fen):
     board = chess.Board(board_fen)
