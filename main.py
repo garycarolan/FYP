@@ -20,15 +20,20 @@ def play_game(white_id, black_id):
         engine = None
 
     # Initialize agents
-    if 'Stockfish' in white_id:
+    if white_id == 'NegativeStockfish':
+        white = NegativeStockfish(engine, time_limit_for_stockfish)
+    elif white_id == 'Stockfish':
         white = Stockfish(engine, time_limit_for_stockfish)
     else:
         white = AGENT_MAPPING[white_id]()
 
-    if 'Stockfish' in black_id:
+    if black_id == 'NegativeStockfish':
+        black = NegativeStockfish(engine, time_limit_for_stockfish)
+    elif black_id == 'Stockfish':
         black = Stockfish(engine, time_limit_for_stockfish)
     else:
         black = AGENT_MAPPING[black_id]()
+
     board = chess.Board()
     start_time = time.time()  # Capture the start time
     while not board.is_game_over():
