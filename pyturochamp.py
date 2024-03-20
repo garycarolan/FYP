@@ -368,12 +368,6 @@ class Turochamp2ply(Turochamp):
         self.MAXPLIES = 2
 
 
-class Turochamp3ply(Turochamp):
-    def __init__(self, colour):
-        super().__init__(colour)
-        self.MAXPLIES = 3
-
-
 # Sees knights as more valuable
 class TurochampKnight(Turochamp):
     def __init__(self, colour):
@@ -385,4 +379,18 @@ class TurochampKnight(Turochamp):
 class TurochampBishop(Turochamp):
     def __init__(self, colour):
         super().__init__(colour)
+        self.BISHOP_VALUE = 5
+
+
+class Turochamp2plyKnight(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.KNIGHT_VALUE = 5
+
+
+class Turochamp2plyBishop(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
         self.BISHOP_VALUE = 5

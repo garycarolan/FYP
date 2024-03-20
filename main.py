@@ -56,13 +56,14 @@ def play_game(white_id, black_id):
 
 
 # Global Setup Vars, worst algorithms were removed to save runtime as they are irrelevant to performance evaluation
-time_limit_for_stockfish = 0.001  # Time limit for each move, reduced to bring closer to turochamp
+time_limit_for_stockfish = 0.00001  # Time limit for each move, reduced to bring closer to turochamp
 AGENT_MAPPING = {
     'Turochamp': lambda colour='none': Turochamp(colour),
-    #'Turochamp2ply': lambda colour='none': Turochamp2ply(colour),
-    #'Turochamp3ply': lambda colour='none': Turochamp3ply(colour),
-    #'TurochampKnight': lambda colour='none': TurochampKnight(colour),
-    #'TurochampBishop': lambda colour='none': TurochampBishop(colour),
+    'Turochamp2ply': lambda colour='none': Turochamp2ply(colour),
+    'Turochamp2plyKnight': lambda colour='none': Turochamp2plyKnight(colour),
+    'Turochamp2plyBishop': lambda colour='none': Turochamp2plyBishop(colour),
+    'TurochampKnight': lambda colour='none': TurochampKnight(colour),
+    'TurochampBishop': lambda colour='none': TurochampBishop(colour),
     'CCCP': CCCP,
     'Stockfish': lambda engine=None: Stockfish(engine, time_limit_for_stockfish),
 }
