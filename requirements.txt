@@ -1,2 +1,5 @@
-chess
-numpy
+chess~=1.10.0
+numpy~=1.26.4
+
+pandas~=2.2.1
+pathos~=0.3.2

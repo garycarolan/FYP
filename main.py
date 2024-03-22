@@ -12,25 +12,24 @@ def play_game_wrapper(args):
 
 def play_game(white_id, black_id):
     # Special handling for Stockfish agents
-    if 'Stockfish' in white_id or 'Stockfish' in black_id:
-        engine = chess.engine.SimpleEngine.popen_uci('stockfish/stockfish-windows-x86-64-avx2.exe')
-    else:
-        engine = None
-
+    # if 'Stockfish' in white_id or 'Stockfish' in black_id:
+    #     engine = chess.engine.SimpleEngine.popen_uci('stockfish/stockfish-windows-x86-64-avx2.exe')
+    # else:
+    #     engine = None
     # Initialize agents
     if white_id in AGENT_MAPPING:
         if 'Turochamp' in white_id:  # For Turochamp variants, pass the colour
             white = AGENT_MAPPING[white_id]('white')
-        elif white_id == 'Stockfish':  # For Stockfish, pass the engine
-            white = AGENT_MAPPING[white_id](engine)
+        # elif white_id == 'Stockfish':  # For Stockfish, pass the engine
+        #     white = AGENT_MAPPING[white_id](engine)
         else:
             white = AGENT_MAPPING[white_id]()
 
     if black_id in AGENT_MAPPING:
         if 'Turochamp' in black_id:  # For Turochamp variants, pass the colour
             black = AGENT_MAPPING[black_id]('black')
-        elif black_id == 'Stockfish':  # For Stockfish, pass the engine
-            black = AGENT_MAPPING[black_id](engine)
+        # elif black_id == 'Stockfish':  # For Stockfish, pass the engine
+        #     black = AGENT_MAPPING[black_id](engine)
         else:
             black = AGENT_MAPPING[black_id]()
 
@@ -50,13 +49,12 @@ def play_game(white_id, black_id):
     outcome = board.outcome()
     print(white_id, 'vs', black_id)
     # Close the local engine for Stockfish agents
-    if engine is not None:
-        engine.quit()
+    # if engine is not None:
+    #     engine.quit()
     return white_id, black_id, outcome, game_duration
 
 
-# Global Setup Vars, worst algorithms were removed to save runtime as they are irrelevant to performance evaluation
-time_limit_for_stockfish = 0.00001  # Time limit for each move, reduced to bring closer to turochamp
+# time_limit_for_stockfish = 0.00001  # Time limit for each move, reduced to bring closer to turochamp
 AGENT_MAPPING = {
     'Turochamp': lambda colour='none': Turochamp(colour),
     'Turochamp2ply': lambda colour='none': Turochamp2ply(colour),
@@ -64,8 +62,6 @@ AGENT_MAPPING = {
     'Turochamp2plyBishop': lambda colour='none': Turochamp2plyBishop(colour),
     'TurochampKnight': lambda colour='none': TurochampKnight(colour),
     'TurochampBishop': lambda colour='none': TurochampBishop(colour),
-    'CCCP': CCCP,
-    'Stockfish': lambda engine=None: Stockfish(engine, time_limit_for_stockfish),
 }
 
 if __name__ == "__main__":

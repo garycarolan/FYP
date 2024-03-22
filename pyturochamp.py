@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import struct
+#TODO: add positional consideration mentioned in paper
+# also consider doing a side by side with random moves
+# also consider rounding to one digit as turing describes, mention in paper
 
 # A Python chess engine inspired by
 # http://en.chessbase.com/post/reconstructing-turing-s-paper-machine
@@ -154,6 +157,7 @@ class Turochamp:
             )
 
         # elected not to use this to avoid run time becoming longer with division operations
+        # turing mentions both in the report, prefers division but runtime is already too long
         def getval2(b):
             "Get total piece value of board (White / Black, Turing's preferred method)"
             wv = (
