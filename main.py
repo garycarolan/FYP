@@ -11,28 +11,9 @@ def play_game_wrapper(args):
 
 
 def play_game(white_id, black_id):
-    # Special handling for Stockfish agents
-    # if 'Stockfish' in white_id or 'Stockfish' in black_id:
-    #     engine = chess.engine.SimpleEngine.popen_uci('stockfish/stockfish-windows-x86-64-avx2.exe')
-    # else:
-    #     engine = None
-    # Initialize agents
-    if white_id in AGENT_MAPPING:
-        if 'Turochamp' in white_id:  # For Turochamp variants, pass the colour
-            white = AGENT_MAPPING[white_id]('white')
-        # elif white_id == 'Stockfish':  # For Stockfish, pass the engine
-        #     white = AGENT_MAPPING[white_id](engine)
-        else:
-            white = AGENT_MAPPING[white_id]()
-
-    if black_id in AGENT_MAPPING:
-        if 'Turochamp' in black_id:  # For Turochamp variants, pass the colour
-            black = AGENT_MAPPING[black_id]('black')
-        # elif black_id == 'Stockfish':  # For Stockfish, pass the engine
-        #     black = AGENT_MAPPING[black_id](engine)
-        else:
-            black = AGENT_MAPPING[black_id]()
-
+    # Other logical code for non-Turochamp agents has been removed
+    white = AGENT_MAPPING[white_id]('white')
+    black = AGENT_MAPPING[black_id]('black')
 
     board = chess.Board()
     start_time = time.time()  # Capture the start time
@@ -48,9 +29,6 @@ def play_game(white_id, black_id):
     game.headers["Black"] = black_id
     outcome = board.outcome()
     print(white_id, 'vs', black_id)
-    # Close the local engine for Stockfish agents
-    # if engine is not None:
-    #     engine.quit()
     return white_id, black_id, outcome, game_duration
 
 

@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import struct
 #TODO: add positional consideration mentioned in paper
-# also consider doing a side by side with random moves
-# also consider rounding to one digit as turing describes, mention in paper
 
 # A Python chess engine inspired by
 # http://en.chessbase.com/post/reconstructing-turing-s-paper-machine
@@ -60,7 +58,7 @@ class Turochamp:
             while y < x:
                 x = y
                 y = (x + n // x) // 2
-            return round(x)
+            return round(x, 1)
 
         def getpos(b):
             "Get positional-play value for a board"
@@ -364,6 +362,8 @@ class Turochamp:
 
         return getmove(b)
 
+
+#TODO: add easylearn to these guys
 
 # This and 3ply search further into the game
 class Turochamp2ply(Turochamp):
