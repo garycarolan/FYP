@@ -17,7 +17,7 @@ def play_game(white_id, black_id):
 
     board = chess.Board()
     start_time = time.time()  # Capture the start time
-    while not board.is_game_over():
+    while not board.is_game_over(claim_draw=True):
         player = white if board.turn else black
         move_uci = player(board.fen())
         move = chess.Move.from_uci(move_uci)
@@ -27,8 +27,9 @@ def play_game(white_id, black_id):
     game = chess.pgn.Game.from_board(board)
     game.headers["White"] = white_id
     game.headers["Black"] = black_id
-    outcome = board.outcome()
+    outcome = board.outcome(claim_draw=True)
     print(white_id, 'vs', black_id)
+    print(outcome)
     return white_id, black_id, outcome, game_duration
 
 
@@ -55,26 +56,34 @@ if __name__ == "__main__":
     pool.join()
 
     # Table Setup
-    columns = ['Agent', 'Wins', 'Losses', 'Draws', 'Total Games', 'Total Game Lengths']
+    columns = ['Agent', 'Wins', 'Losses', 'Draws by Repetition', 'Draws by Move Rule', 'Other Draws', 'Total Games',
+               'Total Game Lengths']
     results_df = pd.DataFrame(columns=columns).set_index('Agent').astype({'Total Game Lengths': 'float64'})
 
     # Ensure all agents are represented in the DataFrame, even if they don't play
     for agent_id in agent_ids:
-        results_df.loc[agent_id] = [0, 0, 0, 0, 0]
+        results_df.loc[agent_id] = [0, 0, 0, 0, 0, 0, 0]
 
     # Process the results
     for white_id, black_id, outcome, game_duration in results:
         if outcome.winner is None:  # Draw
-            results_df.loc[white_id, 'Draws'] += 1
-            results_df.loc[black_id, 'Draws'] += 1
-        elif outcome.winner:  # White wins
+            if outcome.termination == chess.Termination.THREEFOLD_REPETITION:
+                results_df.loc[white_id, 'Draws by Repetition'] += 1
+                results_df.loc[black_id, 'Draws by Repetition'] += 1
+            elif outcome.termination == chess.Termination.FIFTY_MOVES:
+                results_df.loc[white_id, 'Draws by Move Rule'] += 1
+                results_df.loc[black_id, 'Draws by Move Rule'] += 1
+            else:
+                results_df.loc[white_id, 'Other Draws'] += 1
+                results_df.loc[black_id, 'Other Draws'] += 1
+        elif outcome.winner:  # (.winner is an optional and color is bool true for white as defined in chess package)
             results_df.loc[white_id, 'Wins'] += 1
             results_df.loc[black_id, 'Losses'] += 1
         else:  # Black wins
             results_df.loc[black_id, 'Wins'] += 1
             results_df.loc[white_id, 'Losses'] += 1
 
-        # Update total games and total game lengths for both agents
+        # Updating total games and total game lengths for both agents
         for agent_id in [white_id, black_id]:
             results_df.loc[agent_id, 'Total Games'] += 1
             results_df.loc[agent_id, 'Total Game Lengths'] += game_duration
