@@ -32,16 +32,25 @@ def play_game(white_id, black_id):
     print(outcome)
     return white_id, black_id, outcome, game_duration
 
-
-# time_limit_for_stockfish = 0.00001  # Time limit for each move, reduced to bring closer to turochamp
 AGENT_MAPPING = {
-    'Turochamp': lambda colour='none': Turochamp(colour),
-    'Turochamp2ply': lambda colour='none': Turochamp2ply(colour),
-    'Turochamp2plyKnight': lambda colour='none': Turochamp2plyKnight(colour),
-    'Turochamp2plyBishop': lambda colour='none': Turochamp2plyBishop(colour),
-    'TurochampKnight': lambda colour='none': TurochampKnight(colour),
-    'TurochampBishop': lambda colour='none': TurochampBishop(colour),
+    'Turochamp': lambda colour: Turochamp(colour),
+    # knights
+    'Knight': lambda colour: TurochampKnight(colour),
+    'Knight Rand': lambda colour: TurochampKnightRand(colour),
+    'Knight PST': lambda colour: TurochampKnightPST(colour),
+    'Knight Rand PST': lambda colour: TurochampKnightRandPST(colour),
+    # 2 ply knights
+    '2ply Knight': lambda colour: Turochamp2plyKnight(colour),
+    '2ply Knight Rand': lambda colour: Turochamp2plyKnightRand(colour),
+    '2ply Knight PST': lambda colour: Turochamp2plyKnightPST(colour),
+    '2ply Knight Rand PST': lambda colour: Turochamp2plyKnightRandPST(colour),
+    # 2 ply bishops
+    '2ply Bishop': lambda colour: Turochamp2plyBishop(colour),
+    '2ply Bishop Rand': lambda colour: Turochamp2plyBishopRand(colour),
+    '2ply Bishop PST': lambda colour: Turochamp2plyBishopPST(colour),
+    '2ply Bishop Rand PST': lambda colour: Turochamp2plyBishopRandPST(colour),
 }
+
 
 if __name__ == "__main__":
     begin_runtime = time.time()  # Capture the start time
@@ -56,13 +65,13 @@ if __name__ == "__main__":
     pool.join()
 
     # Table Setup
-    columns = ['Agent', 'Wins', 'Losses', 'Draws by Repetition', 'Draws by Move Rule', 'Other Draws', 'Total Games',
+    columns = ['Agent', 'Wins', 'Losses', 'Draws by Repetition', 'Other Draws', 'Total Games',
                'Total Game Lengths']
     results_df = pd.DataFrame(columns=columns).set_index('Agent').astype({'Total Game Lengths': 'float64'})
 
     # Ensure all agents are represented in the DataFrame, even if they don't play
     for agent_id in agent_ids:
-        results_df.loc[agent_id] = [0, 0, 0, 0, 0, 0, 0]
+        results_df.loc[agent_id] = [0, 0, 0, 0, 0, 0]
 
     # Process the results
     for white_id, black_id, outcome, game_duration in results:
@@ -70,9 +79,6 @@ if __name__ == "__main__":
             if outcome.termination == chess.Termination.THREEFOLD_REPETITION:
                 results_df.loc[white_id, 'Draws by Repetition'] += 1
                 results_df.loc[black_id, 'Draws by Repetition'] += 1
-            elif outcome.termination == chess.Termination.FIFTY_MOVES:
-                results_df.loc[white_id, 'Draws by Move Rule'] += 1
-                results_df.loc[black_id, 'Draws by Move Rule'] += 1
             else:
                 results_df.loc[white_id, 'Other Draws'] += 1
                 results_df.loc[black_id, 'Other Draws'] += 1
@@ -91,7 +97,7 @@ if __name__ == "__main__":
     # Calculate average game lengths
     results_df['Average Game Length'] = results_df['Total Game Lengths'] / results_df['Total Games']
 
-    results_df.to_csv('Results.csv', index=True)
+    results_df.to_csv('NewResults.csv', index=True)
     end_runtime = time.time()  # Capture the end time
     runtime = end_runtime - begin_runtime  # Calculate the duration in seconds
     print('Runtime:', runtime)

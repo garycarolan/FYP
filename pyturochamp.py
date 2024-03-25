@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import struct
-#TODO: add positional consideration mentioned in paper
 
 # A Python chess engine inspired by
 # http://en.chessbase.com/post/reconstructing-turing-s-paper-machine
@@ -363,29 +362,36 @@ class Turochamp:
         return getmove(b)
 
 
-#TODO: add easylearn to these guys
-
-# This and 3ply search further into the game
-class Turochamp2ply(Turochamp):
-    def __init__(self, colour):
-        super().__init__(colour)
-        self.MAXPLIES = 2
-
-
-# Sees knights as more valuable
+# 1 ply knights ################################################################
 class TurochampKnight(Turochamp):
     def __init__(self, colour):
         super().__init__(colour)
         self.KNIGHT_VALUE = 5
 
 
-# Sees bishops as more valuable
-class TurochampBishop(Turochamp):
+class TurochampKnightRand(Turochamp):
     def __init__(self, colour):
         super().__init__(colour)
-        self.BISHOP_VALUE = 5
+        self.KNIGHT_VALUE = 5
+        self.EasyLearn = 3
 
 
+class TurochampKnightPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.KNIGHT_VALUE = 5
+        self.PSTAB = 3
+
+
+class TurochampKnightRandPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.KNIGHT_VALUE = 5
+        self.EasyLearn = 3
+        self.PSTAB = 3
+
+
+# 2 ply Knights ################################################################
 class Turochamp2plyKnight(Turochamp):
     def __init__(self, colour):
         super().__init__(colour)
@@ -393,8 +399,59 @@ class Turochamp2plyKnight(Turochamp):
         self.KNIGHT_VALUE = 5
 
 
+class Turochamp2plyKnightRand(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.KNIGHT_VALUE = 5
+        self.EasyLearn = 3
+
+
+class Turochamp2plyKnightPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.KNIGHT_VALUE = 5
+        self.PSTAB = 3
+
+
+class Turochamp2plyKnightRandPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.KNIGHT_VALUE = 5
+        self.EasyLearn = 3
+        self.PSTAB = 3
+
+
+# 2 ply bishops ################################################################
 class Turochamp2plyBishop(Turochamp):
     def __init__(self, colour):
         super().__init__(colour)
         self.MAXPLIES = 2
         self.BISHOP_VALUE = 5
+
+
+class Turochamp2plyBishopRand(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.BISHOP_VALUE = 5
+        self.EasyLearn = 3
+
+
+class Turochamp2plyBishopPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.BISHOP_VALUE = 5
+        self.PSTAB = 3
+
+
+class Turochamp2plyBishopRandPST(Turochamp):
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.MAXPLIES = 2
+        self.BISHOP_VALUE = 5
+        self.EasyLearn = 3
+        self.PSTAB = 3
