@@ -6,6 +6,10 @@ Algorithm implementations from this repository are included but non-functional i
 
 The default configuration uses different variations of the "Turochamp" implementation from https://github.com/mdoege/TUROjs.git, with some modifications for performance and compatibility.
 
+Tournament data is output to a .csv file, example tournament data from previous and current versions of the project is available in the `project_output_data` file. This data was further processed in Excel, and may include data columns from previous versions, it is not indicative of the current default output.
+
+These third party resources were implemented without permision, solely for academic use.
+
 ## Installation
 
 ```
