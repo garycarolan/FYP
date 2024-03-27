@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import struct
 
 # A Python chess engine inspired by
 # http://en.chessbase.com/post/reconstructing-turing-s-paper-machine
@@ -52,11 +51,11 @@ class Turochamp:
             # Used Newton-Raphson to reduce execution time, final result is rounded so won't change outcome
             if n == 0:
                 return 0
-            x = n
-            y = (x + 1) // 2
-            while y < x:
+            x = float(n)
+            y = (x + n / x) / 2
+            while abs(x - y) > 0.01:  # Fixed flooring issue and instead gave 2 decimal place precision.
                 x = y
-                y = (x + n // x) // 2
+                y = (x + n / x) / 2
             return round(x, 1)
 
         def getpos(b):
